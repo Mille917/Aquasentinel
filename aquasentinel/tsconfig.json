@@ -1,8 +1,12 @@
 {
-  // "extends": "@adonisjs/tsconfig/tsconfig.app.json",
+  "extends": "@adonisjs/tsconfig/tsconfig.app.json",
   "compilerOptions": {
     "baseUrl": "./",
-    "paths": {"#validators/*": ["app/validators/*"]},
+    "paths": {
+      "#validators/*": [
+        "app/validators/*"
+      ]
+    },
     "rootDir": "./",
     "outDir": "./build",
     "module": "NodeNext",
