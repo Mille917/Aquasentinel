@@ -1,0 +1,49 @@
+name: Deploy AdonisJS App
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20' # Use the Node.js version your app requires
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run Build (if applicable)
+      run: |
+        node ace build || echo "No build step required"
+
+    - name: Upload via SSH to VPS
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "."
+        target: "/var/www/aquasentinel" # adjust to your server path
+
+    - name: Run SSH commands on server
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd /var/www/aquasentinel
+          npm ci --omit=dev
+          node ace migration:run --force
+          pm2 restart aquasentinel || pm2 start server.js --name aquasentinel
