@@ -21,7 +21,7 @@ jobs:
         node-version: '20' # Use the Node.js version your app requires
 
     - name: Install dependencies
-      run: npm ci
+      run: npm install
 
     - name: Run Build (if applicable)
       run: |
