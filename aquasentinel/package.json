@@ -5,7 +5,7 @@
   "type": "module",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "node bin/server.js",
+    "start": "node ace serve",
     "dev": "node --loader ts-node-maintained/esm ace serve --hmr",
     "build": "node --loader ts-node-maintained/esm ace build --production",
     "test": "node --loader ts-node-maintained/esm ace test",
