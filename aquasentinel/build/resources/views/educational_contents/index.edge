@@ -1,0 +1,163 @@
+@component('layouts/main')
+
+@slot('title')
+<span class="text-blue-700 font-bold text-2xl flex items-center gap-2">
+  📘 🌱 Learn & Prevent – Educational Content
+</span>
+@endslot
+
+<div class="max-w-5xl mx-auto px-6 py-12 space-y-12">
+
+  <h1 class="text-4xl font-extrabold text-gray-800">Be Prepared. Stay Safe. Protect Nature.</h1>
+  <p class="text-gray-600 max-w-2xl">Explore expert tips and community guidance on reducing disaster risk, staying safe
+    during floods and droughts, and preserving your local environment.</p>
+
+  @if(category)
+  <h2 class="text-lg font-semibold text-gray-800 mb-4">
+    Showing tips for:
+    <a href="/educational_contents/category/{{ category }}" class="capitalize text-blue-600 underline hover:text-blue-800">
+      {{ category }}
+    </a>
+  </h2>
+  @endif
+  @if(category === 'flood')
+  <div class="space-y-6">
+    <div class="p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
+      <h3 class="text-lg font-bold text-blue-700">How to Prepare Your Basement for Heavy Rain</h3>
+      <p class="text-sm text-gray-700">Install sump pumps and check for cracks in foundation walls. Waterproofing now
+        can prevent thousands in flood damage later.</p>
+    </div>
+    <div class="p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
+      <h3 class="text-lg font-bold text-blue-700">Neighborhood Flood Watch Planning</h3>
+      <p class="text-sm text-gray-700">Create a simple alert chain via SMS or WhatsApp. Coordinate safe zones and
+        support for vulnerable residents.</p>
+    </div>
+  </div>
+  @endif
+
+  @if(category === 'drought')
+  <div class="space-y-6">
+    <div class="p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded">
+      <h3 class="text-lg font-bold text-yellow-600">Low-Water Gardening Strategies</h3>
+      <p class="text-sm text-gray-700">Switch to native and drought-tolerant plants like lavender, agave, or sedum to
+        save water and thrive in dry months.</p>
+    </div>
+    <div class="p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded">
+      <h3 class="text-lg font-bold text-yellow-600">Greywater Use at Home</h3>
+      <p class="text-sm text-gray-700">Reuse water from sinks and washing machines to irrigate outdoor plants—just be
+        sure to use eco-friendly detergents.</p>
+    </div>
+  </div>
+  @endif
+
+  @if(category === 'environmental')
+  <div class="space-y-6">
+    <div class="p-4 bg-green-50 border-l-4 border-green-500 rounded">
+      <h3 class="text-lg font-bold text-green-700">Community Tree Planting Drives</h3>
+      <p class="text-sm text-gray-700">Join or organize local reforestation events. Trees help prevent soil erosion and
+        absorb carbon from the air.</p>
+    </div>
+    <div class="p-4 bg-green-50 border-l-4 border-green-500 rounded">
+      <h3 class="text-lg font-bold text-green-700">Reduce Your Plastic Footprint</h3>
+      <p class="text-sm text-gray-700">Carry reusable bags, water bottles, and containers. Support local shops that
+        avoid plastic packaging.</p>
+    </div>
+  </div>
+  @endif
+
+  @if(category === 'emergency')
+  <div class="space-y-6">
+    <div class="p-4 bg-indigo-50 border-l-4 border-indigo-400 rounded">
+      <h3 class="text-lg font-bold text-indigo-700">Create a Family Go-Bag</h3>
+      <p class="text-sm text-gray-700">Pack essentials like water, snacks, meds, flashlight, batteries, and copies of
+        IDs. Store it near your exit.</p>
+    </div>
+    <div class="p-4 bg-indigo-50 border-l-4 border-indigo-400 rounded">
+      <h3 class="text-lg font-bold text-indigo-700">Neighborhood Drill Coordination</h3>
+      <p class="text-sm text-gray-700">Simulate a power outage or flood response with neighbors. These exercises build
+        resilience and readiness.</p>
+    </div>
+  </div>
+  @endif
+
+
+
+  <div class="grid md:grid-cols-2 gap-8">
+    <!-- Card 1 -->
+    <div class="border rounded-xl p-6 shadow-sm bg-white">
+      <h2 class="text-xl font-semibold text-blue-700 mb-2">
+        <a href="/educational_contents?category=flood" class="hover:underline">
+          💧 Flood Preparedness
+        </a>
+      </h2>
+      <ul class="list-disc ml-5 text-gray-700 text-sm space-y-1">
+        <li>Know your local flood risk zones.</li>
+        <li>Keep emergency kits with water, food, and supplies.</li>
+        <li>Elevate electrical systems and appliances in flood-prone areas.</li>
+        <li>Sign up for flood alerts and warnings.</li>
+      </ul>
+    </div>
+
+    <!-- Repeat for other cards -->
+
+
+    <!-- Card 2 -->
+    <div class="border rounded-xl p-6 shadow-sm bg-white">
+      <h2 class="text-xl font-semibold text-yellow-600 mb-2">
+        <a href="/educational_contents?category=drought" class="hover:underline">
+          ☀️ Drought Resilience
+        </a>
+      </h2>
+      <ul class="list-disc ml-5 text-gray-700 text-sm space-y-1">
+        <li>Use water-saving fixtures and appliances.</li>
+        <li>Harvest rainwater for non-drinking use.</li>
+        <li>Choose drought-resistant plants for your garden.</li>
+        <li>Report water leaks in your area.</li>
+      </ul>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="border rounded-xl p-6 shadow-sm bg-white">
+      <h2 class="text-xl font-semibold text-green-600 mb-2">
+        <a href="/educational_contents?category=environmental" class="hover:underline">
+          🌱 Environmental Protection
+        </a>
+      </h2>
+      <ul class="list-disc ml-5 text-gray-700 text-sm space-y-1">
+        <li>Reduce plastic use and recycle properly.</li>
+        <li>Participate in local clean-up efforts.</li>
+        <li>Conserve energy to reduce your carbon footprint.</li>
+        <li>Plant trees and protect natural habitats.</li>
+      </ul>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="border rounded-xl p-6 shadow-sm bg-white">
+      <h2 class="text-xl font-semibold text-indigo-600 mb-2">
+        <a href="/educational_contents?category=emergency" class="hover:underline">
+          📦 Emergency Readiness
+        </a>
+      </h2>
+      <ul class="list-disc ml-5 text-gray-700 text-sm space-y-1">
+        <li>Create a family communication plan.</li>
+        <li>Store copies of vital documents in a waterproof container.</li>
+        <li>Practice evacuation drills regularly.</li>
+        <li>Keep a battery-powered radio for updates.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="text-center mt-12">
+    <a href="/contribute_content"
+      class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition">
+      💡 Contribute Your Tips
+    </a>
+    <p class="text-gray-500 mt-2 text-sm">Your knowledge can help others stay safe and sustainable.</p>
+  </div>
+
+</div>
+
+@endcomponent
+<!-- This is the educational content page for AquaSentinel, providing tips and resources for flood and drought preparedness, environmental protection, and emergency readiness. -->
+<!-- The page encourages users to contribute their own tips and knowledge to help the community. -->

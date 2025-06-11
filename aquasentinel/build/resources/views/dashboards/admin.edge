@@ -1,0 +1,63 @@
+@component('layouts/main')
+
+@section('title')
+  Dashboard
+@endsection
+@if(session.has('success'))
+  <div class="bg-green-100 text-green-700 p-4 rounded mb-4">
+    {{ session.get('success') }}
+  </div>
+@endif
+
+
+@section('content')
+  <h1 class="text-2xl font-bold mb-4">Bienvenue {{ auth.user.username }} 👋</h1>
+
+  <p class="mb-4">Connecté en tant que : <strong>{{ auth.user.role }}</strong></p>
+
+  <div class="mb-6">
+    <h2 class="text-xl font-semibold">Fonctionnalités accessibles à tous</h2>
+    <ul class="list-disc pl-6">
+      <li><a href="/alerts" class="text-blue-500">Voir les alertes</a></li>
+      <li><a href="/forecasts" class="text-blue-500">Voir les prévisions</a></li>
+      <li><a href="/educational_contents" class="text-blue-500">Contenus éducatifs</a></li>
+      <li><a href="/reports/create" class="text-blue-500">Soumettre un rapport</a></li>
+    </ul>
+  </div>
+
+  @if(user.role === 'moderator' || user.role === 'admin')
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold">Modération</h2>
+      <ul class="list-disc pl-6">
+        <li><a href="/alerts" class="text-purple-500">Valider / Supprimer les alertes</a></li>
+        <li><a href="/forecasts" class="text-purple-500">Valider les prévisions</a></li>
+        <li><a href="/educational_contents" class="text-purple-500">Modérer les contenus éducatifs</a></li>
+        <li><a href="/reports" class="text-purple-500">Gérer les rapports</a></li>
+      </ul>
+    </div>
+  @endif
+
+  @if(user.role === 'admin')
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold text-red-600">Administration</h2>
+      <ul class="list-disc pl-6">
+        <li><a href="/users" class="text-red-500">Gérer les utilisateurs</a></li>
+        <li><a href="/investments" class="text-red-500">Suivre les investissements</a></li>
+        <li><a href="/sensordata" class="text-red-500">Consulter les données capteurs</a></li>
+      </ul>
+    </div>
+  @endif
+  @if(user.role === 'admin')
+  <div class="text-sm text-gray-500">
+    🎩 Vous êtes connecté en tant qu’administrateur.
+  </div>
+@endif
+
+
+  <form method="POST" action="/auth/logout">
+    {{ csrfField() }}
+    <button class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Se déconnecter</button>
+  </form>
+@endsection
+
+@endcomponent
