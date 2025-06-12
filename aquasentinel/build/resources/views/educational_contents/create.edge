@@ -1,0 +1,86 @@
+@component('layouts/main')
+@slot('title')
+<span class="text-blue-700 font-bold text-2xl flex items-center gap-2">
+  ✍️ Share a Tip
+</span>
+@endslot
+
+<div class="max-w-xl mx-auto py-10 px-4">
+  <form method="POST" action="/educational_contents" class="space-y-6 bg-white p-8 rounded-lg shadow-md border" novalidate>
+    {{-- <input type="hidden" name="_csrf" value="{{ csrfToken }}"> --}}
+    {{ csrfField() }}
+    <h1 class="text-3xl font-extrabold text-gray-800 mb-4">Share Your Tip</h1>
+
+    <!-- Forecast Select -->
+    <div>
+      <label for="forecastId" class="block text-sm font-medium text-gray-700 mb-1">Select Forecast</label>
+      <select id="forecastId" name="forecastId" required
+        class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        <option value="" disabled selected>Select a forecast</option>
+        @each(forecast in forecasts)
+          <option value="{{ forecast.id }}">{{ forecast.title }} ({{ forecast.date }})</option>
+        @endeach
+      </select>
+    </div>
+
+    <!-- Title Input -->
+    <div>
+      <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Tip Title</label>
+      <input
+        id="title"
+        name="title"
+        type="text"
+        placeholder="E.g., How to Prepare Your Basement for Heavy Rain"
+        class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        required
+      >
+    </div>
+
+    <!-- Category Select -->
+    <div>
+      <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+      <select
+        id="category"
+        name="category"
+        class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        required
+      >
+        <option value="" disabled selected>Select category</option>
+        <option value="flood">Flood Preparedness</option>
+        <option value="drought">Drought Prevention</option>
+        <option value="environmental">Environmental Protection</option>
+        <option value="emergency">Community Safety</option>
+      </select>
+    </div>
+
+    <!-- Body Textarea -->
+    <div>
+      <label for="body" class="block text-sm font-medium text-gray-700 mb-1">Your Tip</label>
+      <textarea
+        id="body"
+        name="body"
+        rows="6"
+        placeholder="Share your tip here..."
+        class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        required
+      ></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center">
+      <button
+        type="submit"
+        class="bg-green-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-green-700 transition"
+      >
+        Submit Tip
+      </button>
+    </div>
+  </form>
+  <div class="mt-6 text-center">
+    <a href="/educational_contents" class="text-blue-600 underline hover:text-blue-800">
+      ← Back to all categories
+    </a>
+  </div>
+</div>
+
+@endcomponent

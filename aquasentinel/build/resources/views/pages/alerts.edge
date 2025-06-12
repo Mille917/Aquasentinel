@@ -1,0 +1,32 @@
+@component('layouts/main')
+
+@slot('title')
+  <span class="text-blue-700 font-bold text-2xl"> 🚨 Alerts</span>
+@endslot
+
+<div class="max-w-5xl mx-auto py-8 px-4">
+  <h1 class="text-3xl font-semibold mb-6">Recent Alerts</h1>
+
+  <ul class="grid md:grid-cols-2 gap-6">
+    @each(alert in alerts)
+      <li class="border-l-4 p-4 rounded-xl shadow bg-white
+                 {{ alert.alertType === 'banner' ? 'border-yellow-500' : alert.alertType === 'push' ? 'border-blue-500' : 'border-red-500' }}">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 class="text-xl font-semibold">
+              {{ alert.forecast?.title || 'Untitled Forecast' }}
+            </h2>
+            <p class="mt-1 text-gray-700">{{ alert.message || 'No message provided' }}</p>
+            <p class="text-sm text-gray-500 mt-2">📍 {{ alert.region || 'Unknown region' }}</p>
+          </div>
+          <span
+            class="inline-block px-2 py-1 text-xs font-semibold rounded-full
+            {{ alert.alertType === 'banner' ? 'bg-yellow-100 text-yellow-700' : alert.alertType === 'push' ? 'bg-blue-100 text-blue-700' : 'bg-red-100 text-red-700' }}">
+            {{ alert.alertType.toUpperCase() }}
+          </span>
+        </div>
+      </li>
+    @endeach
+  </ul>
+</div>
+@endcomponent
