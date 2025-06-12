@@ -1,4 +1,5 @@
 {
+  "$schema": "./tsconfig.schema.json",
   "extends": "@adonisjs/tsconfig/tsconfig.app.json",
   "compilerOptions": {
     "baseUrl": "./",
