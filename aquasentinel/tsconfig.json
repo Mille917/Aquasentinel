@@ -1,6 +1,5 @@
 {
   "$schema": "./tsconfig.schema.json",
-  "extends": "@adonisjs/tsconfig/tsconfig.app.json",
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
@@ -11,8 +10,11 @@
     "rootDir": "./",
     "outDir": "./build",
     "module": "NodeNext",
+    "moduleResolution": "nodenext",
     "strict": true,
     "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }
