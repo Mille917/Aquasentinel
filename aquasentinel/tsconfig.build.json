@@ -1,0 +1,17 @@
+{
+    "$schema": "./tsconfig.schema.json",
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "module": "NodeNext", // ✅ Must match resolution
+        "moduleResolution": "NodeNext", // ✅ Required for AdonisJS v6+ (ESM)
+        "outDir": "./build",
+        "noEmit": false
+    },
+    "include": [
+        "app",
+        "start",
+        "config",
+        "database",
+        "providers"
+    ]
+}
