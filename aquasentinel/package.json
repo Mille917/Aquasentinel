@@ -67,6 +67,7 @@
     "@adonisjs/vite": "^4.0.0",
     "@aws-sdk/client-dynamodb": "^3.828.0",
     "@vinejs/vine": "^3.0.1",
+    "adonis": "^0.9.0",
     "axios": "^1.9.0",
     "countries-list": "^3.1.1",
     "edge.js": "^6.2.1",
