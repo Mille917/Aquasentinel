@@ -5,7 +5,9 @@
   "type": "module",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "PORT=10000 node ace serve",
+    "start": "PORT=10000 node build/server.js",
+    "start:dev": "node --loader ts-node-maintained/esm ace serve --watch",
+    "start:debug": "node --loader ts-node-maintained/esm ace serve --debug",
     "dev": "node --loader ts-node-maintained/esm ace serve --hmr",
     "build": "node --loader ts-node-maintained/esm ace build --production",
     "test": "node --loader ts-node-maintained/esm ace test",
