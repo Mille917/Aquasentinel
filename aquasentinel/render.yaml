@@ -1,11 +1,27 @@
+# services:
+#   - type: web
+#     name: aquasentinel
+#     env: node
+#     buildCommand: npm install && npm run build
+#     startCommand: npm start
+#     envVars:
+#       - key: NODE_ENV
+#         value: production
+#       - key: PORT
+#         value: 3000
+
 services:
   - type: web
     name: aquasentinel
     env: node
-    buildCommand: npm install && npm run build
-    startCommand: npm start
+    buildCommand: |
+      npm install
+      npm run build
+    startCommand: node build/server.js
     envVars:
       - key: NODE_ENV
         value: production
+      - key: HOST
+        value: 0.0.0.0
       - key: PORT
-        value: 3000
+        value: 10000
