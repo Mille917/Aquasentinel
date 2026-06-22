@@ -6,7 +6,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "node bin/server.js",
-    "dev": "node --loader ts-node-maintained/esm ace serve --hmr",
+    "dev": "node build/ace.js serve --hmr",
     "build": "node ace build --ignore-ts-errors",
     "test": "node --loader ts-node-maintained/esm ace test",
     "lint": "eslint .",

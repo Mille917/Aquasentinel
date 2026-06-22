@@ -2,6 +2,7 @@
   // "extends": "@adonisjs/tsconfig/tsconfig.app.json",
   "compilerOptions": {
     "baseUrl": "./",
+    "ignoreDeprecations": "6.0",
     "paths": {"#validators/*": ["app/validators/*"]},
     "rootDir": "./",
     "outDir": "./build",
