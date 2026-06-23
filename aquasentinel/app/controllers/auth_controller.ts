@@ -2,6 +2,8 @@ import type { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
 import hash from '@adonisjs/core/services/hash'
 import Alert from '#models/alert'
+import Database from '@ioc:Adonis/Lucid/Database'
+import { Client } from 'pg'
 import Forecast from '#models/forecast'
 import { countries } from 'countries-list'
 
@@ -76,7 +78,17 @@ export default class AuthController {
   }
 
   public async showPublicDashboard({ view }: HttpContext) {
-    const recentalerts = await Alert.query().select('id', 'message', 'region', 'alertType', 'created_at').orderBy('created_at', 'desc').limit(5).preload('forecast')
+    const client = new Client({
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT || '5432'),
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
+    })
+    await client.connect()
+    const res = await client.query("SELECT id, message, region, alertType, created_at FROM alerts ORDER BY created_at DESC LIMIT 5")
+    await client.end()
+    const recentalerts = res.rows
     const forecasts = await Forecast.query().orderBy('created_at', 'desc').limit(5)
     return view.render('dashboards/public', { recentalerts, forecasts })
   }
