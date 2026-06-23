@@ -1,6 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import SensorData from '#models/sensor_datum'
-import { schema } from '@adonisjs/validator'
+
+// Import VineJS validators
+import { createSensorDataValidator } from '#validators/sensor_datum'
 
 export default class SensorDataController {
   async index({ response }: HttpContext) {
@@ -9,16 +11,10 @@ export default class SensorDataController {
   }
 
   async store({ request, response }: HttpContext) {
-    const sensorSchema = schema.create({
-      location: schema.string(),
-      temperature: schema.number.optional(),
-      humidity: schema.number.optional(),
-      rainfall: schema.number.optional(),
-      waterLevel: schema.number.optional(),
-      recordedAt: schema.date.optional(),
-    })
+    // Validate request using VineJS
+    const payload = await request.validateUsing(createSensorDataValidator)
 
-    const payload = await request.validate({ schema: sensorSchema })
+    // Create sensor data entry
     const data = await SensorData.create(payload)
     return response.created(data)
   }
