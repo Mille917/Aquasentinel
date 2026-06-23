@@ -5,60 +5,43 @@ import Alert from '#models/alert'
 import Forecast from '#models/forecast'
 import { countries } from 'countries-list'
 
+// Import VineJS validators
+import { loginValidator, registerValidator } from '#validators/auth'
 
 export default class AuthController {
-  // Page de login
   public async showLoginForm({ view }: HttpContext) {
     return view.render('auth/login')
   }
 
-  // Page d'inscription
   public async showRegisterForm({ view }: HttpContext) {
     const countryList = Object.entries(countries).map(([code, country]) => ({
       code,
       name: country.name,
-      regions: (country as any).regions ? Object.entries((country as any).regions).map(([regionCode, regionName]) => ({
-        code: regionCode,
-        name: regionName,
-      })) : [],
+      regions: (country as any).regions
+        ? Object.entries((country as any).regions).map(([regionCode, regionName]) => ({
+            code: regionCode,
+            name: regionName,
+          }))
+        : [],
     }))
-    
+
     return view.render('auth/register', { countryList })
   }
 
-  // Connexion simplifiée
   public async login({ request, response, auth, session }: HttpContext) {
-    const email = request.input('email')
-    const password = request.input('password')
-
-    if (!email || !password) {
-      session.flash('error', 'Please, provide an email or password.')
-      return response.redirect('/login')
-    }
+    const payload = await request.validateUsing(loginValidator)
 
     try {
-      const user = await User.findBy('email', email)
-
-      if (!user) {
-        session.flash('error', 'User not found.')
-        return response.redirect('/login')
-      }
-
-      const isPasswordValid = await hash.verify(user.password, password)
-
-      if (!isPasswordValid) {
-        session.flash('error', 'Incorrect password.')
+      const user = await User.findBy('email', payload.email)
+      if (!user || !(await hash.verify(user.password, payload.password))) {
+        session.flash('error', 'Invalid credentials.')
         return response.redirect('/login')
       }
 
       await auth.use('web').login(user)
       session.flash('success', 'You are now connected.')
 
-      if (user.role === 'admin' || user.role === 'moderator') {
-        return response.redirect('/dashboards/admin')
-      } else {
-        return response.redirect('/dashboards/public')
-      }
+      return response.redirect(user.role === 'admin' || user.role === 'moderator' ? '/dashboards/admin' : '/dashboards/public')
     } catch (error) {
       console.error('Login error:', error)
       session.flash('error', 'An error occurred during login, please try again later.')
@@ -66,89 +49,40 @@ export default class AuthController {
     }
   }
 
-  // Inscription simplifiée
   public async register({ request, response, auth, session }: HttpContext) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    const username = request.input('username')
-    const email = request.input('email')
-    const password = request.input('password')
-    const country = request.input('country')
-    const region = request.input('region')
-    const role = request.input('role') || 'user' // Default to 'user' if not provided
-    const isAdmin = role === 'admin' || role === 'moderator'
-    const isModerator = role === 'moderator'
-    const isUser = role === 'Citizen'
+    const payload = await request.validateUsing(registerValidator)
 
-    // Validate inputs
-    if (!country || !region) {
-      session.flash('error', 'Country and region are required.')
+    const existingUser = await User.query().where('email', payload.email).orWhere('username', payload.username).first()
+    if (existingUser) {
+      session.flash('error', 'Email or username already exists.')
       return response.redirect('/register')
     }
 
-    if (!isAdmin && !isModerator && !isUser) {
-      session.flash('error', 'Invalid role selected.')
-
-      // Validate username, email, and password
-
-      if (!username || !email || !password) {
-        session.flash('error', 'Every field is required.')
-        return response.redirect('/register')
-      }
-      if (!emailRegex.test(email)) {
-        session.flash('error', 'Invalid email format.')
-        return response.redirect('/register')
-      }
-      if (password.length < 6) {
-        session.flash('error', 'Password must be at least 6 characters long.')
-        return response.redirect('/register')
-      }
-
-      const existing = await User.query()
-        .where('email', email)
-        .orWhere('username', username)
-        .first()
-
-      if (existing) {
-        session.flash('error', 'Email or username already exists.')
-        return response.redirect('/register')
-      }
-
-      try {
-        const user = await User.create({ username, email, password,country, region, role })
-        await auth.use('web').login(user)
-        session.flash('success', 'Account created successfully, you are now connected.')
-        return response.redirect('/dashboards/admin')
-      } catch (error) {
-        console.error('Erreur inscription :', error)
-        session.flash('error', 'An error occurred during registration, please try again later.')
-        return response.redirect('/dashboards/public')
-      }
+    try {
+      const user = await User.create(payload)
+      await auth.use('web').login(user)
+      session.flash('success', 'Account created successfully.')
+      return response.redirect('/dashboards/public')
+    } catch (error) {
+      console.error('Registration error:', error)
+      session.flash('error', 'An error occurred during registration, please try again later.')
+      return response.redirect('/register')
     }
-
   }
 
-  // Déconnexion
   public async logout({ auth, response }: HttpContext) {
     await auth.use('web').logout()
     return response.redirect('/login')
   }
 
-  // Show public dashboard
   public async showPublicDashboard({ view }: HttpContext) {
     const recentalerts = await Alert.query().select('id', 'message', 'region', 'alertType', 'created_at').orderBy('created_at', 'desc').limit(5).preload('forecast')
     const forecasts = await Forecast.query().orderBy('created_at', 'desc').limit(5)
     return view.render('dashboards/public', { recentalerts, forecasts })
   }
 
-  // Dashboard
   public async showDashboard({ auth, view }: HttpContext) {
     await auth.check()
-    const user = auth.user!
-    return view.render('dashboards/admin', { user })
+    return view.render('dashboards/admin', { user: auth.user })
   }
-
-
 }
-
-
-// Note: This code is a simplified version of the original controller, focusing on login and registration.

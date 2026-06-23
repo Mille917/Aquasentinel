@@ -1,13 +1,20 @@
 {
-  // "extends": "@adonisjs/tsconfig/tsconfig.app.json",
+  "$schema": "./tsconfig.schema.json",
   "compilerOptions": {
     "baseUrl": "./",
-    "paths": {"#validators/*": ["app/validators/*"]},
+    "paths": {
+      "#validators/*": [
+        "app/validators/*"
+      ]
+    },
     "rootDir": "./",
     "outDir": "./build",
     "module": "NodeNext",
+    "moduleResolution": "nodenext",
     "strict": true,
     "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }
